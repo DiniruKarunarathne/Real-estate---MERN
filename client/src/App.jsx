@@ -4,12 +4,14 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Header from "./components/Header";
 
 
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Header/>
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/about" element={<About/>}/>
@@ -17,6 +19,6 @@ export default function App() {
         <Route path="/sign-In" element={<Signin/>}/>
         <Route path="/signUp" element={<Signup/>}/>
       </Routes> 
-    </BrowserRouter>
+    </BrowserRouter> // BrowserRouter: Manages navigation between different views in your React app, keeping the URL in sync with what's displayed on the screen. It's like a built-in GPS for our app's user interface.
   )
 }
