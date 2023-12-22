@@ -1,12 +1,13 @@
-import { set } from 'mongoose';
 import React, { useState } from 'react';
 import {Link , useNavigate} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart , signInSuccess, signInFailure} from '../redux/user/userSlice';
 
 export default function Signin() {
   const [formData, setFormData] = useState({}); // Initialize state for form data
-  const [error, setError] = useState(null);  
-  const [loading, setLoading] = useState(false); // Initialize loading state
+  const {loading, error} = useSelector((state) => state.user); // Get loading and error state from user slice (redux store)
   const navigate = useNavigate(); // Initialize navigate function from useNavigate hook
+  const dispatch = useDispatch(); // Initialize dispatch function from useDispatch hook
   
   const handleChange = (e) => {
     setFormData({
@@ -18,7 +19,7 @@ export default function Signin() {
     e.preventDefault(); // Prevent form from refreshing the page
 
     try{
-          setLoading(true); // Show a loading indicator while submitting
+          dispatch(signInStart()); // Dispatch sign in start action
 
           //Initiate a network request to the server for signup:
           const res = await fetch('/backend/auth/sign-In', {
@@ -34,17 +35,14 @@ export default function Signin() {
           // console.log(data);
           // Check if the request was successful:
           if (data.success === false) { 
-            setLoading(false);
-            setError(data.message); 
+            dispatch(signInFailure(data.message)); // Dispatch sign in failure action
             return;
           }
-          setLoading(false); // Hide loading indicator
-          setError(null); // Clear any previous errors
+          dispatch(signInSuccess(data)); // Dispatch sign in success action
           navigate('/'); // Navigate to sign in page
   
         } catch(error){
-          setLoading(false);
-          setError(error.message); //k
+          dispatch(signInFailure(error.message)); // Dispatch sign in failure action
         }
     
   };
