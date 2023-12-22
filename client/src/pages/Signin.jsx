@@ -44,7 +44,7 @@ export default function Signin() {
   
         } catch(error){
           setLoading(false);
-          setError(error.message);
+          setError(error.message); //k
         }
     
   };
