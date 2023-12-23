@@ -44,4 +44,34 @@ export const signin = async (req, res, next) => {
       next(error);
     }
   };
-  
+
+  export const google = async (req, res, next) => {
+    try { 
+      const user =  await User.findOne({ email: req.body.email });
+      if (user) {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        const { password, ...rest } = user._doc; // Get user info without password
+        res
+          .cookie('access_token', token, { httpOnly: true }) // Set cookie after creating token 
+          .status(200)
+          .json(rest);
+      } // If user exists, send user data
+      else{
+        const generatedPassword = Math.random().toString(36).slice(-8); // Generate random password for new user
+        const hashedPassword = bcryptjs.hashSync(generatedPassword, 10); // Encrypt password
+
+        const newUser = new User({username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4), email:req.body.email , password:hashedPassword , avatar:req.body.photo }); // Create new user
+
+        await newUser.save(); // Save new user
+
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+        const { password, ...rest } = newUser._doc; // Get user info without password
+        res
+          .cookie('access_token', token, { httpOnly: true }) // Set cookie after creating token
+          .status(200)
+          .json(rest);
+      } // If user doesn't exist, create new user
+    } catch (error) {
+      next(error);
+    }
+  };  
