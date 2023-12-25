@@ -75,3 +75,12 @@ export const signin = async (req, res, next) => {
       next(error);
     }
   };  
+
+  export const signOut = (req, res) => {
+    try {
+      res.clearCookie('access_token'); // Clear cookie
+      res.status(200).json('Sign out successfully');
+    } catch (error) {
+      next(error);
+    }
+  };
