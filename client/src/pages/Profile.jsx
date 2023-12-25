@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { useRef, useState , useEffect} from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase.js";
-import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice.js";
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../redux/user/userSlice.js";
 import { useDispatch } from "react-redux";
 import { set } from "mongoose";
 
@@ -39,12 +39,12 @@ export default function Profile() {
     }
   }, [file]) // Added useEffect hook to upload file to firebase storage when file state changes
 
-  
+  // Added handleFileUpload function to upload file to firebase storage
   const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const storage = getStorage(app);                      
+    const fileName = new Date().getTime() + file.name;     // Setting the file name to current timestamp + file name to avoid duplicate file names
+    const storageRef = ref(storage, fileName);         // Creating a reference to the file in firebase storage
+    const uploadTask = uploadBytesResumable(storageRef, file);       // Creating a upload task to upload the file to firebase storage
    
     uploadTask.on('state_changed',
       (snapshot) => { // Progress function 
@@ -78,7 +78,7 @@ export default function Profile() {
     e.preventDefault(); // Preventing the default form submission behavior
     try {
       dispatch(updateUserStart()); // Dispatching the updateUserStart action
-      const res = await fetch(`/backend/user/update/${currentUser._id}`, 
+      const res = await fetch(`/backend/user/update/${currentUser._id}`, // Making a request to the backend to update the user
        {
         method: 'POST',
         headers: {
@@ -93,9 +93,26 @@ export default function Profile() {
       } 
 
       dispatch(updateUserSuccess(data)); // Dispatching the updateUserSuccess action on success
-      setUpdateSuccess(true); // Setting the update success state
+      setUpdateSuccess(true); // Setting the update success state to true on success 
     } catch (error) {
       dispatch(updateUserFailure(error.message)); // Dispatching the updateUserFailure action on error
+    }
+  }
+  const handleDeleteUser = async() => {
+    try {
+      dispatch(deleteUserStart()); // Dispatching the deleteUserStart action
+      const res = await fetch(`/backend/user/delete/${currentUser._id}`, // Making a request to the backend to delete the user
+       {
+        method: 'DELETE',
+       });
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(deleteUserFailure(data.message)); // Dispatching the deleteUserFailure action on error
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message)); // Dispatching the deleteUserFailure action on error
     }
   }
 
@@ -130,7 +147,7 @@ export default function Profile() {
       </form>
 
       <div className="flex justify-between mt-4 ">
-        <span className="text-red-700 cursor-pointer">Delete account</span>
+        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete account</span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
       <p className="text-red-700 mt-5">
