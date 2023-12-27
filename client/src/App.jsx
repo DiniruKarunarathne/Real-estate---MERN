@@ -6,6 +6,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import CreateListing from "./pages/CreateListing";
 
 
 
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/signUp" element={<Signup/>}/>
         <Route element={<PrivateRoute/>}> 
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/create-listing" element={<CreateListing/>}/>
         </Route>
       </Routes> 
     </BrowserRouter> // BrowserRouter: Manages navigation between different views in your React app, keeping the URL in sync with what's displayed on the screen. It's like a built-in GPS for our app's user interface.
