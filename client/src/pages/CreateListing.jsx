@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 
 export default function CreateListing() {
-    const { currentUser } = useSelector(state => state.user)
+    const { currentUser } = useSelector((state) => state.user)
+    const navigate = useNavigate();
     const [files, setFiles] = useState([])
     const [formData, setFormData] = useState({
         imageUrls: [],
@@ -17,7 +18,7 @@ export default function CreateListing() {
         bedrooms: 1,
         bathrooms: 1,
         regularPrice: 0,
-        discountPrice: 0,
+        discountedPrice: 0,
         offer: false,
         parking: false,
         furnished: false,
@@ -26,7 +27,6 @@ export default function CreateListing() {
     const [uploading , setUploading] = useState(false)
     const [error , setError] = useState(false)
     const [loading , setLoading] = useState(false)
-    const navigate = useNavigate();
     console.log(formData)
 
     const handleImageSubmit = (e) =>{
@@ -110,7 +110,7 @@ export default function CreateListing() {
         try {
             if(formData.imageUrls.length < 1) return setError('You must upload at least one image')
 
-            if(+formData.discountPrice > +formData.regularPrice) return setError('Discount price cannot be higher than regular price')
+            if(+formData.discountedPrice > +formData.regularPrice) return setError('Discount price cannot be higher than regular price')
             
             setLoading(true);
             setError(false);
@@ -121,7 +121,7 @@ export default function CreateListing() {
               },
               body: JSON.stringify({
                 ...formData,
-                discountedPrice: formData.discountPrice, // Corrected property name
+                
                 userRef: currentUser._id,
             }),
             
@@ -134,6 +134,7 @@ export default function CreateListing() {
             }
 
             navigate(`/listing/${data._id}`);
+            
         } catch (error) {
             setError(error.message)
             setLoading(false)
@@ -188,7 +189,7 @@ export default function CreateListing() {
                     </div>
                     {formData.offer && (
                         <div className='flex items-center gap-2'>
-                        <input type='number' id='discountPrice' min='1' max='' required className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.discountPrice}/>
+                        <input type='number' id='discountPrice' min='1' max='' required className='p-3 border border-gray-300 rounded-lg' onChange={handleChange} value={formData.discountedPrice}/>
                         <div className='flex flex-col items-center'>
                             <p>Discounted price</p>
                             <span className='text-xs'>($ / month)</span>
