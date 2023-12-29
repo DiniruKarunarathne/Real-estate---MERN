@@ -33,4 +33,29 @@ export const deleteListing = async(req, res , next)=>{
     }
 }
 
+export const updateListing = async(req, res, next) => {
+    const listing = await Listing.findById(req.params.id); // req.params.id is the id of the listing to be updated
+
+    // If listing is not found
+    if (!listing) {
+        return next(errorHandler(404, 'Listing not found!'));
+    }
+    
+
+    // If the user is not the owner of the listing
+    if(req.user.id !== listing.userRef){
+        return next(errorHandler(401, 'Unauthorized'));
+    }
+
+    try {
+        const updatedListing = await Listing.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+        res.status(200).json(updatedListing);
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 
