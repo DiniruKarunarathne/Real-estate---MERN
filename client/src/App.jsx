@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
+import Search from "./pages/Search";
 
 
 
@@ -22,6 +23,8 @@ export default function App() {
         <Route path="/sign-In" element={<Signin/>}/>
         <Route path="/signUp" element={<Signup/>}/>
         <Route path="/listing/:listingId" element={<Listing/>}/>
+        <Route path="/search" element={<Search/>}/>       
+
         <Route element={<PrivateRoute/>}>                  {/*PrivateRoute is a component that we created to protect routes that require authentication.*/}
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/create-listing" element={<CreateListing/>}/>
