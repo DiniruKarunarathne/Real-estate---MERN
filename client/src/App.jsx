@@ -10,6 +10,7 @@ import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
+import Footer from "./components/Footer";
 
 
 
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Header/>
+      
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/about" element={<About/>}/>
@@ -30,7 +32,9 @@ export default function App() {
           <Route path="/create-listing" element={<CreateListing/>}/>
           <Route path="/update-listing/:listingId" element={<UpdateListing/>}/>
         </Route>
-      </Routes> 
+      
+      </Routes>
+      <Footer/> 
     </BrowserRouter> // BrowserRouter: Manages navigation between different views in your React app, keeping the URL in sync with what's displayed on the screen. It's like a built-in GPS for our app's user interface.
   )
 }
