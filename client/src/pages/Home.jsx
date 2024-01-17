@@ -93,6 +93,32 @@ export default function Home() {
       </Swiper>
 
 
+      <div className="bg-gray-200 p-10">
+        <h2 className='text-3xl font-semibold text-slate-900 text-center'>What would you like to do?</h2>
+        <p className='text-center mb-10'>Make property decisions smart and informed.</p>
+        <div className='mt-20 flex flex-col space-y-10 md:flex-row md:space-x-10'>
+
+          <div className='w-full md:w-1/3 border p-4 flex flex-col items-center'>
+            <h2 className='text-xl font-bold mb-4 text-slate-800 text-center '>Find a property for sale</h2>
+            <p className='text-center'>Find an Apartment or Building for sale</p>
+            <Link className='mt-auto bg-blue-300 rounded-lg p-2' to={'/search?type=sale'} style={{ marginTop: '20px' }}>Find sales</Link>
+          </div>
+
+          <div className='w-full md:w-1/3 border p-4 flex flex-col items-center'>
+            <h2 className='text-xl font-bold mb-4 text-slate-800 text-center '>Find a property for rent</h2>
+            <p className='text-center'>Find a House, Apartment or Building for rent/lease</p>
+            <Link className='mt-auto bg-blue-300 rounded-lg p-2' to={'/search?type=rent'}>Find rentals</Link>
+          </div>
+
+          <div className='w-full md:w-1/3 border p-4 flex flex-col items-center'>
+            <h2 className='text-xl font-bold mb-4 text-slate-800 text-center '>Create your advertisement</h2>
+            <p className='text-center'>Create and post advertisements for your properties </p>
+            <Link className='mt-auto bg-blue-300 rounded-lg p-2' to={'/create-listing'}>Create ad</Link>
+          </div>
+
+        </div>
+      </div>
+
 
       {/* listing result */}
 
